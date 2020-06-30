@@ -28,29 +28,38 @@ public class BootstrapConfiguration {
         }
     }
 
-    public HumeRedisConnectionFactory getHumeRedisConnectionFactory(){
+    private HumeRedisConnectionFactory getLettuceRedisConnectionFactory(){
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
         RedisProperties redisProperties = humeProperties.getRedis();
         configuration.setPassword(redisProperties.getPassword());
         configuration.setPort(redisProperties.getPort());
         configuration.setHostName(redisProperties.getHost());
         configuration.setDatabase(redisProperties.getDatabase());
-        LettuceClientConfigurationBuilder builder = createBuilder(this.humeProperties.getRedis().getLettuce().getPool());
+        Pool pool = redisProperties.getLettuce().getPool();
+        LettuceClientConfigurationBuilder builder = pool == null ?
+                LettuceClientConfiguration.builder() :
+                LettucePoolingClientConfiguration.builder().poolConfig(getPoolConfig(pool));
         HumeRedisConnectionFactory factory = new HumeRedisConnectionFactory(configuration);
         factory.getConnection();
         return factory;
     }
 
-    private LettuceClientConfigurationBuilder createBuilder(Pool pool) {
-        if (pool == null) {
-            return LettuceClientConfiguration.builder();
-        }
+    private GenericObjectPoolConfig<?> getPoolConfig(Pool properties){
         GenericObjectPoolConfig<?> config = new GenericObjectPoolConfig<>();
-        config.setMaxTotal(pool.getMaxActive());
-        config.setMaxTotal(pool.getMaxIdle());
-        config.setMinIdle(pool.getMinIdle());
-        return LettucePoolingClientConfiguration.builder().poolConfig(config);
+        config.setMaxTotal(properties.getMaxActive());
+        config.setMaxIdle(properties.getMaxIdle());
+        config.setMinIdle(properties.getMinIdle());
+        if (properties.getTimeBetweenEvictionRuns() != null) {
+            config.setTimeBetweenEvictionRunsMillis(properties.getTimeBetweenEvictionRuns().toMillis());
+        }
+        if (properties.getMaxWait() != null) {
+            config.setMaxWaitMillis(properties.getMaxWait().toMillis());
+        }
+        return config;
     }
+
+
+
 
 
 
