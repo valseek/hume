@@ -1,78 +1,84 @@
 package com.yak.hume.configuration;
 
-import io.lettuce.core.RedisURI;
+import io.lettuce.core.resource.ClientResources;
+import lombok.SneakyThrows;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties.Pool;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.data.redis.LettuceClientConfigurationBuilderCustomizer;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties.Pool;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration.LettuceClientConfigurationBuilder;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 
-@EnableConfigurationProperties({HumeProperties.class })
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
+@EnableConfigurationProperties({HumeProperties.class})
 @Configuration
 public class BootstrapConfiguration {
 
-    private HumeProperties humeProperties;
+    private final HumeProperties humeProperties;
 
-    BootstrapConfiguration(HumeProperties humeProperties ){
+    BootstrapConfiguration(HumeProperties humeProperties) {
         this.humeProperties = humeProperties;
     }
 
-    public static class HumeRedisConnectionFactory extends LettuceConnectionFactory {
-        public HumeRedisConnectionFactory(RedisStandaloneConfiguration configuration) {
-            super(configuration);
-        }
-    }
+    RedisConnectionFactory getHumeRedisConnectionFactory(ObjectProvider<LettuceClientConfigurationBuilderCustomizer> builderCustomizers,
+                                                         ClientResources clientResources) {
+        // hack lettuce connection configuration
+        try {
+            Class<?> clz = Class.forName("org.springframework.boot.autoconfigure.data.redis.LettuceConnectionConfiguration");
+            Object configuration = AccessController.doPrivileged(new PrivilegedAction<Object>() {
+                @SneakyThrows
+                @Override
+                public Object run() {
+                    Constructor c = clz.getDeclaredConstructor(RedisProperties.class, ObjectProvider.class, ObjectProvider.class);
+                    c.setAccessible(true);
+                    return c.newInstance(humeProperties.getRedis(), new HumeObjectProvider(), new HumeObjectProvider());
+                }
+            });
 
-    private HumeRedisConnectionFactory getLettuceRedisConnectionFactory(){
-        RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        RedisProperties redisProperties = humeProperties.getRedis();
-        configuration.setPassword(redisProperties.getPassword());
-        configuration.setPort(redisProperties.getPort());
-        configuration.setHostName(redisProperties.getHost());
-        configuration.setDatabase(redisProperties.getDatabase());
-        Pool pool = redisProperties.getLettuce().getPool();
-        LettuceClientConfigurationBuilder builder = pool == null ?
-                LettuceClientConfiguration.builder() :
-                LettucePoolingClientConfiguration.builder().poolConfig(getPoolConfig(pool));
-        HumeRedisConnectionFactory factory = new HumeRedisConnectionFactory(configuration);
-        factory.getConnection();
-        return factory;
-    }
-
-    private GenericObjectPoolConfig<?> getPoolConfig(Pool properties){
-        GenericObjectPoolConfig<?> config = new GenericObjectPoolConfig<>();
-        config.setMaxTotal(properties.getMaxActive());
-        config.setMaxIdle(properties.getMaxIdle());
-        config.setMinIdle(properties.getMinIdle());
-        if (properties.getTimeBetweenEvictionRuns() != null) {
-            config.setTimeBetweenEvictionRunsMillis(properties.getTimeBetweenEvictionRuns().toMillis());
+            Method m = clz.getDeclaredMethod("redisConnectionFactory");
+            m.setAccessible(true);
+            return (RedisConnectionFactory) m.invoke(configuration, builderCustomizers , clientResources);
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
         }
-        if (properties.getMaxWait() != null) {
-            config.setMaxWaitMillis(properties.getMaxWait().toMillis());
-        }
-        return config;
+        return null;
     }
 
 
 
+    private static class HumeObjectProvider implements ObjectProvider {
 
+        @Override
+        public Object getObject(Object... args) throws BeansException {
+            return null;
+        }
 
+        @Override
+        public Object getIfAvailable() throws BeansException {
+            return null;
+        }
 
+        @Override
+        public Object getIfUnique() throws BeansException {
+            return null;
+        }
 
-
-
-
-
-
-
-
-
-
-
+        @Override
+        public Object getObject() throws BeansException {
+            return null;
+        }
+    }
 
 }
