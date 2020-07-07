@@ -1,13 +1,13 @@
-package com.yak.hume;
+package com.yak.eris;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RedisDelayedQueueApplication {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(RedisDelayedQueueApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 }

@@ -1,8 +1,7 @@
-package com.yak.hume.annotation;
+package com.yak.eris.rene.annotation;
 
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 
 import java.lang.annotation.*;
 

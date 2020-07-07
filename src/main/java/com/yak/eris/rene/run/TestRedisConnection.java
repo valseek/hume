@@ -1,4 +1,4 @@
-package com.yak.hume.sample.run;
+package com.yak.eris.rene.run;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

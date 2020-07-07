@@ -1,4 +1,4 @@
-package com.yak.hume.annotation;
+package com.yak.eris.rene.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

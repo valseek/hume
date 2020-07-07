@@ -1,4 +1,4 @@
-package com.yak.hume.configuration;
+package com.yak.eris.rene.configuration;
 
 import lombok.Getter;
 import lombok.Setter;

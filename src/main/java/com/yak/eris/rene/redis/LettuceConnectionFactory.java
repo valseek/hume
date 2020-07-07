@@ -1,4 +1,4 @@
-package com.yak.hume.redis;
+package com.yak.eris.rene.redis;
 
 public class LettuceConnectionFactory {
 
