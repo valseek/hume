@@ -1,4 +1,4 @@
-package com.yak.eris.odysseus.map;
+package com.yak.eris.ulixes.map;
 
-public class GraphCirceMap {
+public class GraphUlixesMap {
 }

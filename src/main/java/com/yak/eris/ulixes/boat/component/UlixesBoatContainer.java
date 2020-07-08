@@ -1,6 +1,6 @@
-package com.yak.eris.odysseus.boat.component;
+package com.yak.eris.ulixes.boat.component;
 
-public interface CirceBoatContainer {
+public interface UlixesBoatContainer {
 
     <T> T getGoods(Class<T> type);
 

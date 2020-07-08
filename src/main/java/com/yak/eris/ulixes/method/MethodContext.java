@@ -1,4 +1,4 @@
-package com.yak.eris.odysseus.method;
+package com.yak.eris.ulixes.method;
 
 public class MethodContext {
 

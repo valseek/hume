@@ -1,12 +1,12 @@
-package com.yak.eris.odysseus;
+package com.yak.eris.ulixes;
 
-import com.yak.eris.odysseus.map.CirceMap;
-import com.yak.eris.odysseus.port.CircePort;
+import com.yak.eris.ulixes.map.UlixesMap;
+import com.yak.eris.ulixes.port.UlixesPort;
 
 public interface Sail {
 
-    CircePort[] availablePort(CirceMap map);
+    UlixesPort[] availablePort(UlixesMap map);
 
-    void sail(CircePort port);
+    void sail(UlixesPort port);
 
 }

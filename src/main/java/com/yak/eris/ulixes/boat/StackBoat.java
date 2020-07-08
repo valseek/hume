@@ -1,12 +1,12 @@
-package com.yak.eris.odysseus.boat;
+package com.yak.eris.ulixes.boat;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.yak.eris.odysseus.port.CircePort;
-import com.yak.eris.odysseus.boat.component.GoodsContainer;
+import com.yak.eris.ulixes.port.UlixesPort;
+import com.yak.eris.ulixes.boat.component.GoodsContainer;
 
 import java.util.Stack;
 
-public class StackBoat implements CirceBoat {
+public class StackBoat implements UlixesBoat {
 
     JsonNode goods;
 
@@ -18,12 +18,17 @@ public class StackBoat implements CirceBoat {
     }
 
     @Override
-    public CirceBoat reload(CircePort port) {
+    public void setGoods(JsonNode goods) {
+
+    }
+
+    @Override
+    public UlixesBoat reload(UlixesPort port) {
         return this;
     }
 
     @Override
-    public void dock(CircePort map) {
+    public void dock(UlixesPort map) {
 
     }
 }

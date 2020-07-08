@@ -1,18 +1,22 @@
 package com.yak.eris.ulixes.port;
 
-import com.yak.eris.ulixes.method.CirceMethod;
+import com.yak.eris.ulixes.method.UlixesMethod;
 
-public class AbstractCircePort implements CircePort {
+public class AbstractUlixesPort implements UlixesPort {
 
-    protected CirceMethod method;
+    protected String name;
+
+    protected UlixesMethod method;
 
     @Override
-    public CirceMethod getMethod() {
+    public UlixesMethod getMethod() {
         return method;
     }
 
-
-
+    @Override
+    public String getName() {
+        return null;
+    }
 
 
 }

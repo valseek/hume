@@ -1,10 +1,15 @@
 package com.yak.eris.ulixes.port;
 
-import com.yak.eris.ulixes.method.CirceMethod;
+import com.yak.eris.ulixes.boat.UlixesBoat;
+import com.yak.eris.ulixes.method.UlixesMethod;
 
-public interface CircePort {
+public interface UlixesPort {
 
-    CirceMethod getMethod();
+    UlixesMethod getMethod();
+
+    String getName();
+
+    boolean inspection(UlixesBoat boat);
 
 
 }

@@ -1,4 +1,9 @@
-package com.yak.eris.odysseus.map;
+package com.yak.eris.ulixes.map;
 
-public class CirceMap {
+import com.yak.eris.ulixes.port.UlixesPort;
+
+public interface UlixesMap {
+
+    UlixesPort[] nextPorts(UlixesPort port);
+
 }

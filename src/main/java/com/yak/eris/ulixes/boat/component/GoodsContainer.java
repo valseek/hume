@@ -1,8 +1,8 @@
-package com.yak.eris.odysseus.boat.component;
+package com.yak.eris.ulixes.boat.component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class GoodsContainer implements CirceBoatContainer{
+public class GoodsContainer implements UlixesBoatContainer {
 
     JsonNode originData;
 

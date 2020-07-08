@@ -1,15 +1,17 @@
-package com.yak.eris.odysseus.boat;
+package com.yak.eris.ulixes.boat;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.yak.eris.odysseus.port.CircePort;
+import com.yak.eris.ulixes.port.UlixesPort;
 
-public interface CirceBoat {
+public interface UlixesBoat {
 
     JsonNode getGoods();
 
-    CirceBoat reload(CircePort port);
+    void setGoods(JsonNode goods);
 
-    void dock(CircePort port);
+    UlixesBoat reload(UlixesPort port);
+
+    void dock(UlixesPort port);
 
 }
